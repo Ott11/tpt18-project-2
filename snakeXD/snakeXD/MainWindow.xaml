@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:snakeXD"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="snakeXD" Height="450" Width="800" FontFamily="Showcard Gothic" MouseDown="Window_MouseDown">
     <Grid>
-        
+        <Canvas Background="LightGreen">
+            <Rectangle Width="772" Height="399" Fill="ForestGreen" Canvas.Top="10" Canvas.Left="10" Name="Rectangle"/>
+
+            <Ellipse Width="772" Height="399" Canvas.Top="10" Canvas.Left="10" Name="Jens" KeyDown="Window_KeyDown">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="C:\Users\opilane\Desktop\19396995_10212683928510439_5342149098517660284_n.jpg" Stretch="Fill"/>
+                </Ellipse.Fill>
+            </Ellipse>
+        </Canvas>
     </Grid>
 </Window>
