@@ -20,50 +20,66 @@ namespace snakeXD
     /// </summary>
     public partial class MainWindow : Window
     {
+        const double CellSize = 30D;
+        const int CellCount = 16;
+
         public MainWindow()
         {
             InitializeComponent();
+            DrawBoardBackground();
         }
 
-        private void Canvas_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        private void DrawBoardBackground()
         {
+            SolidColorBrush color1 = Brushes.LightGreen;
+            SolidColorBrush color2 = Brushes.LimeGreen;
 
-        }
+            for (int row = 0; row < CellCount; row++)
+            {
+                SolidColorBrush color =
+                    row % 2 == 0 ? color1 : color2;
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
+                for (int col = 0; col < CellCount; col++)
+                {
+                    Rectangle r = new Rectangle();
+                    r.Width = CellSize;
+                    r.Height = CellSize;
+                    r.Fill = color;
+                    Canvas.SetTop(r, row * CellSize);
+                    Canvas.SetLeft(r, col * CellSize);
+                    board.Children.Add(r);
 
+                    color = color == color1 ? color2 : color1;
+                }
+            }
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Right)
-            {
-                double currentRight = Canvas.GetRight(Jens);
-                double newRight = currentRight + 20;
-                Canvas.SetRight(Jens, newRight);
-            }
-
-            if (e.Key == Key.Left)
-            {
-                double currentLeft = Canvas.GetLeft(Jens);
-                double newLeft = currentLeft + 20;
-                Canvas.SetLeft(Jens, newLeft);
-            }
-
-            if (e.Key == Key.Up)
-            {
-                double currentUp = Canvas.GetTop(Jens);
-                double newUp = currentUp + 20;
-                Canvas.SetTop(Jens, newUp);
-            }
-
-            if(e.Key == Key.Down)
-            {
-                double currentDown = Canvas.GetBottom(Jens);
-                double newBottom = currentDown + 20;
-                Canvas.SetBottom(Jens, newBottom);
-            }
+            //if(e.Key == Key.Right)
+            //{
+            //    double currentLeft = Canvas.GetLeft(rectangle1);
+            //    double newLeft = currentLeft + 20;
+            //    Canvas.SetLeft(rectangle1, newLeft);
+            //}
+            //else if(e.Key == Key.Left)
+            //{
+            //    double currentLeft = Canvas.GetLeft(rectangle1);
+            //    double newLeft = currentLeft - 20;
+            //    Canvas.SetLeft(rectangle1, newLeft);
+            //}
+            //else if(e.Key == Key.Up)
+            //{
+            //    double currentTop = Canvas.GetTop(rectangle1);
+            //    double newTop = currentTop - 20;
+            //    Canvas.SetTop(rectangle1, newTop);
+            //}
+            //else if (e.Key == Key.Down)
+            //{
+            //    double currentTop = Canvas.GetTop(rectangle1);
+            //    double newTop = currentTop + 20;
+            //    Canvas.SetTop(rectangle1, newTop);
+            //}
         }
     }
 }

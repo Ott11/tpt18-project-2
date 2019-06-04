@@ -4,13 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:snakeXD"
+        ResizeMode="NoResize" Topmost="True"
+        SizeToContent="WidthAndHeight"
         mc:Ignorable="d"
-        Title="snakeXD" Height="450" Width="800" FontFamily="Showcard Gothic" MouseDown="Window_MouseDown">
-    <Grid>
-        <Canvas Background="LightGreen">
-            <Rectangle Width="772" Height="399" Fill="ForestGreen" Canvas.Top="10" Canvas.Left="10" Name="Rectangle"/>
-
-            <Ellipse Width="772" Height="399" Canvas.Top="10" Canvas.Left="10" Name="Jens" KeyDown="Window_KeyDown">
+        Title="snakeXD" Width="481.5">
+    <Grid Margin="0,0,390,0">
+        <Canvas Name="board" Background="LightGreen" HorizontalAlignment="Left" Width="480" Height="480">
+            <Ellipse Width="74" Height="73" Canvas.Top="76" Canvas.Left="58" Name="Jens">
                 <Ellipse.Fill>
                     <ImageBrush ImageSource="C:\Users\opilane\Desktop\19396995_10212683928510439_5342149098517660284_n.jpg" Stretch="Fill"/>
                 </Ellipse.Fill>
