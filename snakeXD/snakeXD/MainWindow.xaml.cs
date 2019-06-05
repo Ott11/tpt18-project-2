@@ -24,6 +24,8 @@ namespace snakeXD
         const double CellSize = 30D;
         const int CellCount = 16;
         DispatcherTimer timer;
+        Direction snakeDirection;
+
 
         public MainWindow()
         {
@@ -32,39 +34,41 @@ namespace snakeXD
             InitSnake();
 
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(2);
+            timer.Interval = TimeSpan.FromSeconds(0.5);
             timer.Tick += Timer_Tick;
             timer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            //MoveSnake(Direction.Up);
+            MoveSnake(snakeDirection);
         }
 
         private void InitSnake()
         {
-            Jens.Height = CellSize;
-            Jens.Width = CellSize;
+            snake.Height = CellSize;
+            snake.Width = CellSize;
             double coord = CellCount * CellSize / 2;
-            Canvas.SetTop(Jens, coord);
-            Canvas.SetLeft(Jens, coord);
+            Canvas.SetTop(snake, coord);
+            Canvas.SetLeft(snake, coord);
+
+            snakeDirection = Direction.Up;
         }
 
         private void MoveSnake(Direction direction)
         {
             if (direction == Direction.Up || direction == Direction.Down)
             {
-                double currentTop = Canvas.GetTop(Jens);
+                double currentTop = Canvas.GetTop(snake);
                 double newTop = direction == Direction.Up ? currentTop - CellSize : currentTop + CellSize;
-                Canvas.SetTop(Jens, newTop);
+                Canvas.SetTop(snake, newTop);
             }
 
             if (direction == Direction.Left || direction == Direction.Right)
             {
-                double currentLeft = Canvas.GetLeft(Jens);
+                double currentLeft = Canvas.GetLeft(snake);
                 double newLeft = direction == Direction.Left ? currentLeft - CellSize : currentLeft + CellSize;
-                Canvas.SetLeft(Jens, newLeft);
+                Canvas.SetLeft(snake, newLeft);
             }
         }
 
@@ -75,11 +79,8 @@ namespace snakeXD
 
             for (int row = 0; row < CellCount; row++)
             {
-                SolidColorBrush color = row % 2 == 0 ? color1 : color2;
-                if (row % 2 == 0)
-                {
-
-                }
+                SolidColorBrush color =
+                    row % 2 == 0 ? color1 : color2;
 
                 for (int col = 0; col < CellCount; col++)
                 {
@@ -116,7 +117,6 @@ namespace snakeXD
                 case Key.Right:
                     direction = Direction.Right;
                     break;
-
                 default:
                     return;
             }

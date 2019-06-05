@@ -10,7 +10,7 @@
         Title="snakeXD" Width="481.5" KeyDown="Window_KeyDown">
     <Grid>
         <Canvas Name="board" Background="LightGreen" HorizontalAlignment="Left" Width="480" Height="480">
-            <Rectangle Name="Jens"
+            <Rectangle Name="snake"
                        Panel.ZIndex="10">
                 <Rectangle.Fill>
                     <ImageBrush ImageSource="C:\Users\opilane\Desktop\19396995_10212683928510439_5342149098517660284_n.jpg"/>
