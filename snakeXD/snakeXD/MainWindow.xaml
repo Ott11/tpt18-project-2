@@ -4,18 +4,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:snakeXD"
-        ResizeMode="NoResize" Topmost="True"
-        SizeToContent="WidthAndHeight"
         mc:Ignorable="d"
-        Title="snakeXD" Width="481.5" KeyDown="Window_KeyDown">
+        Title="snakeXD" 
+        ResizeMode="NoResize" Topmost="True" 
+        SizeToContent="WidthAndHeight"
+        KeyDown="Window_KeyDown">
     <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label Name="lblSnakeDirection" FontWeight="Bold"></Label>
+        </StackPanel>
+        
         <Canvas Name="board" Background="LightGreen" HorizontalAlignment="Left" Width="480" Height="480">
-            <Rectangle Name="snake"
-                       Panel.ZIndex="10">
+
+            <Rectangle Name="snakeShape" Panel.ZIndex="10">
                 <Rectangle.Fill>
-                    <ImageBrush ImageSource="C:\Users\opilane\Desktop\19396995_10212683928510439_5342149098517660284_n.jpg"/>
+                    <ImageBrush ImageSource="C:\Users\opilane\Documents\tpt18-project-2\snakeXD\snakeXD\19396995_10212683928510439_5342149098517660284_n.jpg"/>
                 </Rectangle.Fill>
-            </Rectangle>
+            </Rectangle>         <!--Image in project library-->
+
         </Canvas>
+    
     </Grid>
 </Window>

@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -19,59 +11,28 @@ namespace snakeXD
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+//------------------------------------------------------------------------------------
     public partial class MainWindow : Window
     {
         const double CellSize = 30D;
         const int CellCount = 16;
+
         DispatcherTimer timer;
-        Direction snakeDirection;
-
-
+        Snake snake;
+//------------------------------------------------------------------------------------
         public MainWindow()
         {
             InitializeComponent();
             DrawBoardBackground();
-            InitSnake();
+            snake = new Snake(snakeShape, CellSize, CellCount);
+            snake.Init();
 
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(0.5);
             timer.Tick += Timer_Tick;
             timer.Start();
         }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            MoveSnake(snakeDirection);
-        }
-
-        private void InitSnake()
-        {
-            snake.Height = CellSize;
-            snake.Width = CellSize;
-            double coord = CellCount * CellSize / 2;
-            Canvas.SetTop(snake, coord);
-            Canvas.SetLeft(snake, coord);
-
-            snakeDirection = Direction.Up;
-        }
-
-        private void MoveSnake(Direction direction)
-        {
-            if (direction == Direction.Up || direction == Direction.Down)
-            {
-                double currentTop = Canvas.GetTop(snake);
-                double newTop = direction == Direction.Up ? currentTop - CellSize : currentTop + CellSize;
-                Canvas.SetTop(snake, newTop);
-            }
-
-            if (direction == Direction.Left || direction == Direction.Right)
-            {
-                double currentLeft = Canvas.GetLeft(snake);
-                double newLeft = direction == Direction.Left ? currentLeft - CellSize : currentLeft + CellSize;
-                Canvas.SetLeft(snake, newLeft);
-            }
-        }
-
+//------------------------------------------------------------------------------------
         private void DrawBoardBackground()
         {
             SolidColorBrush color1 = Brushes.LightGreen;
@@ -79,8 +40,7 @@ namespace snakeXD
 
             for (int row = 0; row < CellCount; row++)
             {
-                SolidColorBrush color =
-                    row % 2 == 0 ? color1 : color2;
+                SolidColorBrush color = row % 2 == 0 ? color1 : color2;
 
                 for (int col = 0; col < CellCount; col++)
                 {
@@ -97,6 +57,20 @@ namespace snakeXD
             }
         }
 
+        //private void DirectSnake(Direction direction)
+        //{
+        //    snakeDirection = direction;
+        //    lblSnakeDirection.Content =
+        //        $"Direction: {direction}";
+        //}
+
+//------------------------------------------------------------------------------------
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            snake.Move();
+        }
+//------------------------------------------------------------------------------------
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             Direction direction;
@@ -120,15 +94,7 @@ namespace snakeXD
                 default:
                     return;
             }
-            MoveSnake(direction);
-        }
-
-        public enum Direction
-        {
-            Up,
-            Down,
-            Left,
-            Right
+            snake.ChangeDirection(direction);
         }
     }
 }
