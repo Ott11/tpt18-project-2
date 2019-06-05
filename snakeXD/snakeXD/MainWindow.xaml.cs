@@ -27,8 +27,33 @@ namespace snakeXD
         {
             InitializeComponent();
             DrawBoardBackground();
+            InitSnake();
+        }
+        private void InitSnake()
+        {
+            Jens.Height = CellSize;
+            Jens.Width = CellSize;
+            double coord = CellCount * CellSize / 2;
+            Canvas.SetTop(Jens, coord);
+            Canvas.SetLeft(Jens, coord); 
         }
 
+        private void MoveSnake(Direction direction)
+        {
+            if (direction == Direction.Up || direction == Direction.Down)
+            {
+                double currentTop = Canvas.GetTop(Jens);
+                double newTop = direction == Direction.Up ? currentTop - CellSize : currentTop + CellSize;
+                Canvas.SetTop(Jens, newTop);
+            }
+
+            if (direction == Direction.Left || direction == Direction.Right) 
+            {
+                double currentLeft = Canvas.GetLeft(Jens);
+                double newLeft = direction == Direction.Left ? currentLeft - CellSize : currentLeft + CellSize;
+                Canvas.SetLeft(Jens, newLeft);
+            }
+        }
         private void DrawBoardBackground()
         {
             SolidColorBrush color1 = Brushes.LightGreen;
@@ -36,8 +61,12 @@ namespace snakeXD
 
             for (int row = 0; row < CellCount; row++)
             {
-                SolidColorBrush color =
-                    row % 2 == 0 ? color1 : color2;
+                SolidColorBrush color = row % 2 == 0 ? color1 : color2;
+
+                if (row % 2 == 0)
+                {
+
+                }
 
                 for (int col = 0; col < CellCount; col++)
                 {
@@ -56,30 +85,42 @@ namespace snakeXD
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            //if(e.Key == Key.Right)
-            //{
-            //    double currentLeft = Canvas.GetLeft(rectangle1);
-            //    double newLeft = currentLeft + 20;
-            //    Canvas.SetLeft(rectangle1, newLeft);
-            //}
-            //else if(e.Key == Key.Left)
-            //{
-            //    double currentLeft = Canvas.GetLeft(rectangle1);
-            //    double newLeft = currentLeft - 20;
-            //    Canvas.SetLeft(rectangle1, newLeft);
-            //}
-            //else if(e.Key == Key.Up)
-            //{
-            //    double currentTop = Canvas.GetTop(rectangle1);
-            //    double newTop = currentTop - 20;
-            //    Canvas.SetTop(rectangle1, newTop);
-            //}
-            //else if (e.Key == Key.Down)
-            //{
-            //    double currentTop = Canvas.GetTop(rectangle1);
-            //    double newTop = currentTop + 20;
-            //    Canvas.SetTop(rectangle1, newTop);
-            //}
+            Direction direction;
+
+            if (e.Key == Key.Up)
+            {
+                direction = Direction.Up;
+            }
+
+            else if (e.Key == Key.Down)
+            {
+                direction = Direction.Down;
+            }
+
+            else if (e.Key == Key.Right)
+            {
+                direction = Direction.Right;
+            }
+
+            else if (e.Key == Key.Left)
+            {
+                direction = Direction.Left;
+            }
+
+            else
+            {
+                return;
+            }
+ 
+            MoveSnake(direction);
+        }
+
+        public enum Direction
+        {
+            Up,
+            Down,
+            Left,
+            Right
         }
     }
 }
