@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace snakeXD
 {
@@ -22,20 +23,32 @@ namespace snakeXD
     {
         const double CellSize = 30D;
         const int CellCount = 16;
+        DispatcherTimer timer;
 
         public MainWindow()
         {
             InitializeComponent();
             DrawBoardBackground();
             InitSnake();
+
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(2);
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            //MoveSnake(Direction.Up);
+        }
+
         private void InitSnake()
         {
             Jens.Height = CellSize;
             Jens.Width = CellSize;
             double coord = CellCount * CellSize / 2;
             Canvas.SetTop(Jens, coord);
-            Canvas.SetLeft(Jens, coord); 
+            Canvas.SetLeft(Jens, coord);
         }
 
         private void MoveSnake(Direction direction)
@@ -47,13 +60,14 @@ namespace snakeXD
                 Canvas.SetTop(Jens, newTop);
             }
 
-            if (direction == Direction.Left || direction == Direction.Right) 
+            if (direction == Direction.Left || direction == Direction.Right)
             {
                 double currentLeft = Canvas.GetLeft(Jens);
                 double newLeft = direction == Direction.Left ? currentLeft - CellSize : currentLeft + CellSize;
                 Canvas.SetLeft(Jens, newLeft);
             }
         }
+
         private void DrawBoardBackground()
         {
             SolidColorBrush color1 = Brushes.LightGreen;
@@ -62,7 +76,6 @@ namespace snakeXD
             for (int row = 0; row < CellCount; row++)
             {
                 SolidColorBrush color = row % 2 == 0 ? color1 : color2;
-
                 if (row % 2 == 0)
                 {
 
@@ -86,32 +99,27 @@ namespace snakeXD
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             Direction direction;
-
-            if (e.Key == Key.Up)
+            switch (e.Key)
             {
-                direction = Direction.Up;
-            }
+                case Key.Up:
+                    direction = Direction.Up;
+                    break;
 
-            else if (e.Key == Key.Down)
-            {
-                direction = Direction.Down;
-            }
+                case Key.Down:
+                    direction = Direction.Down;
+                    break;
 
-            else if (e.Key == Key.Right)
-            {
-                direction = Direction.Right;
-            }
+                case Key.Left:
+                    direction = Direction.Left;
+                    break;
 
-            else if (e.Key == Key.Left)
-            {
-                direction = Direction.Left;
-            }
+                case Key.Right:
+                    direction = Direction.Right;
+                    break;
 
-            else
-            {
-                return;
+                default:
+                    return;
             }
- 
             MoveSnake(direction);
         }
 

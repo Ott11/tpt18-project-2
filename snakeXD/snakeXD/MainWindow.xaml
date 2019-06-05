@@ -7,14 +7,15 @@
         ResizeMode="NoResize" Topmost="True"
         SizeToContent="WidthAndHeight"
         mc:Ignorable="d"
-        Title="snakeXD" Width="481.5">
-    <Grid Margin="0,0,390,0">
+        Title="snakeXD" Width="481.5" KeyDown="Window_KeyDown">
+    <Grid>
         <Canvas Name="board" Background="LightGreen" HorizontalAlignment="Left" Width="480" Height="480">
-            <Ellipse Width="138" Height="132" Canvas.Top="76" Canvas.Left="58" Name="Jens">
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="C:\Users\opilane\Desktop\19396995_10212683928510439_5342149098517660284_n.jpg" Stretch="Fill"/>
-                </Ellipse.Fill>
-            </Ellipse>
+            <Rectangle Name="Jens"
+                       Panel.ZIndex="10">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="C:\Users\opilane\Desktop\19396995_10212683928510439_5342149098517660284_n.jpg"/>
+                </Rectangle.Fill>
+            </Rectangle>
         </Canvas>
     </Grid>
 </Window>
