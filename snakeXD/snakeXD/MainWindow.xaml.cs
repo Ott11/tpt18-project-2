@@ -18,18 +18,26 @@ namespace snakeXD
         const int CellCount = 16;
 
         DispatcherTimer timer;
+        Random rnd = new Random();
 
         GameStatus gameStatus;
+
+        int foodRow;
+        int foodCol;
 
         Direction snakeDirection;
         int snakeRow;
         int snakeCol;
 
+        int points;
+
         public MainWindow()
         {
             InitializeComponent();
             DrawBoardBackground();
+            InitFood();
             InitSnake();
+            ChangePoints(0);
 
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(0.5);
@@ -37,7 +45,7 @@ namespace snakeXD
             timer.Start();
 
             ChangeGameStatus(GameStatus.Ongoing);
-        }        
+        }
 
         private void DrawBoardBackground()
         {
@@ -55,8 +63,7 @@ namespace snakeXD
                     r.Width = CellSize;
                     r.Height = CellSize;
                     r.Fill = color;
-                    Canvas.SetTop(r, row * CellSize);
-                    Canvas.SetLeft(r, col * CellSize);
+                    SetShape(r, row, col);
                     board.Children.Add(r);
 
                     color = color == color1 ? color2 : color1;
@@ -69,6 +76,22 @@ namespace snakeXD
             gameStatus = newGameStatus;
             lblGameStatus.Content =
                 $"Status: {gameStatus}";
+        }
+
+        private void ChangePoints(int newPoints)
+        {
+            points = newPoints;
+            lblPoints.Content =
+                $"Points: {points}";
+        }
+
+        private void InitFood()
+        {
+            foodShape.Height = CellSize;
+            foodShape.Width = CellSize;
+            foodRow = rnd.Next(0, CellCount);
+            foodCol = rnd.Next(0, CellCount);
+            SetShape(foodShape, foodRow, foodCol);
         }
 
         private void InitSnake()
@@ -91,7 +114,7 @@ namespace snakeXD
         }
 
         private void MoveSnake()
-        {       
+        {
             switch (snakeDirection)
             {
                 case Direction.Up:
@@ -108,11 +131,22 @@ namespace snakeXD
                     break;
             }
 
-            if(snakeRow < 0 || snakeRow >= CellCount ||
-                snakeCol < 0 || snakeCol >= CellCount)
+            bool outOfBoundaries =
+                snakeRow < 0 || snakeRow >= CellCount ||
+                snakeCol < 0 || snakeCol >= CellCount;
+            if (outOfBoundaries)
             {
                 ChangeGameStatus(GameStatus.GameOver);
                 return;
+            }
+
+            bool food =
+                snakeRow == foodRow &&
+                snakeCol == foodCol;
+            if (food)
+            {
+                ChangePoints(points + 1);
+                InitFood();
             }
 
             SetShape(snakeShape, snakeRow, snakeCol);
@@ -165,7 +199,8 @@ namespace snakeXD
                     return;
             }
 
-            ChangeSnakeDirection(direction);           
-        }        
+            ChangeSnakeDirection(direction);
+        }
     }
 }
+
