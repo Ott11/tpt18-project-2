@@ -58,6 +58,7 @@
     <Compile Include="Direction.cs" />
     <Compile Include="GameStatus.cs" />
     <Compile Include="Snake.cs" />
+    <Compile Include="snakePart.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

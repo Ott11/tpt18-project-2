@@ -25,6 +25,8 @@ namespace snakeXD
         int foodRow;
         int foodCol;
 
+        Direction 
+
         Direction snakeDirection;
         int snakeRow;
         int snakeCol;
@@ -148,12 +150,11 @@ namespace snakeXD
                 ChangePoints(points + 1);
                 InitFood();
             }
-
+            
             SetShape(snakeShape, snakeRow, snakeCol);
         }
 
-        private void SetShape(
-            Shape shape, int row, int col)
+        private void SetShape(Shape shape, int row, int col)
         {
             double top = row * CellSize;
             double left = col * CellSize;
@@ -172,8 +173,7 @@ namespace snakeXD
             MoveSnake();
         }
 
-        private void Window_KeyDown(
-            object sender, KeyEventArgs e)
+        private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (gameStatus != GameStatus.Ongoing)
             {
