@@ -10,25 +10,23 @@
         SizeToContent="WidthAndHeight"
         KeyDown="Window_KeyDown">
     <Grid>
-        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-
         <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label Name="lblGameStatus" FontWeight="Bold"></Label>
             <Label Name="lblSnakeDirection" FontWeight="Bold"></Label>
         </StackPanel>
-        
-        <Canvas Name="board" Background="LightGreen" HorizontalAlignment="Left" Width="480" Height="480">
-
-            <Rectangle Name="snakeShape" Panel.ZIndex="10">
-                <Rectangle.Fill>
-                    <ImageBrush ImageSource="C:\Users\opilane\Documents\tpt18-project-2\snakeXD\snakeXD\19396995_10212683928510439_5342149098517660284_n.jpg"/>
-                </Rectangle.Fill>
-            </Rectangle>         <!--Image in project library-->
-
+        <Canvas 
+            Grid.Row="1"
+            Name="board" 
+            Height="480" Width="480">
+            <Rectangle 
+                Name="snakeShape"
+                Fill="MediumBlue"
+                Panel.ZIndex="10">
+            </Rectangle>
         </Canvas>
-    
     </Grid>
 </Window>
