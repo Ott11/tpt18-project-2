@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -25,11 +26,9 @@ namespace snakeXD
         int foodRow;
         int foodCol;
 
-        Direction 
-
         Direction snakeDirection;
-        int snakeRow;
-        int snakeCol;
+        LinkedList<Rectangle> snakeParts =
+            new LinkedList<Rectangle>();
 
         int points;
 
@@ -98,14 +97,27 @@ namespace snakeXD
 
         private void InitSnake()
         {
-            snakeShape.Height = CellSize;
-            snakeShape.Width = CellSize;
             int index = CellCount / 2;
-            snakeRow = index;
-            snakeCol = index;
-            SetShape(snakeShape, snakeRow, snakeCol);
+            for (int i = 0; i < 3; i++)
+            {
+                int row = index;
+                int col = index + i;
 
-            ChangeSnakeDirection(Direction.Up);
+                Location location = new Location(row, col);
+
+                Rectangle r = new Rectangle();
+                r.Height = CellSize;
+                r.Width = CellSize;
+                r.Fill = Brushes.MediumBlue;
+                Panel.SetZIndex(r, 10);
+                r.Tag = location;
+
+                SetShape(r, row, col);
+                board.Children.Add(r);
+                snakeParts.AddLast(r);
+            }
+
+            ChangeSnakeDirection(Direction.Left);
         }
 
         private void ChangeSnakeDirection(Direction direction)
@@ -117,25 +129,35 @@ namespace snakeXD
 
         private void MoveSnake()
         {
+            Rectangle currentHead = snakeParts.First.Value;
+            Location currentHeadLocation =
+                (Location)currentHead.Tag;
+
+            int newHeadRow = currentHeadLocation.Row;
+            int newHeadCol = currentHeadLocation.Col;
+
             switch (snakeDirection)
             {
                 case Direction.Up:
-                    snakeRow--;
+                    newHeadRow--;
                     break;
                 case Direction.Down:
-                    snakeRow++;
+                    newHeadRow++;
                     break;
                 case Direction.Left:
-                    snakeCol--;
+                    newHeadCol--;
                     break;
                 case Direction.Right:
-                    snakeCol++;
+                    newHeadCol++;
                     break;
             }
 
+            Location newHeadLocation =
+                new Location(newHeadRow, newHeadCol);
+
             bool outOfBoundaries =
-                snakeRow < 0 || snakeRow >= CellCount ||
-                snakeCol < 0 || snakeCol >= CellCount;
+                newHeadRow < 0 || newHeadRow >= CellCount ||
+                newHeadCol < 0 || newHeadCol >= CellCount;
             if (outOfBoundaries)
             {
                 ChangeGameStatus(GameStatus.GameOver);
@@ -143,18 +165,37 @@ namespace snakeXD
             }
 
             bool food =
-                snakeRow == foodRow &&
-                snakeCol == foodCol;
+                newHeadRow == foodRow &&
+                newHeadCol == foodCol;
             if (food)
             {
                 ChangePoints(points + 1);
                 InitFood();
+
+                Rectangle r = new Rectangle();
+                r.Height = CellSize;
+                r.Width = CellSize;
+                r.Fill = Brushes.MediumBlue;
+                Panel.SetZIndex(r, 10);
+                r.Tag = newHeadLocation;
+
+                SetShape(r, newHeadRow, newHeadCol);
+                board.Children.Add(r);
+                snakeParts.AddFirst(r);
             }
-            
-            SetShape(snakeShape, snakeRow, snakeCol);
+            else
+            {
+                Rectangle newHead = snakeParts.Last.Value;
+                newHead.Tag = newHeadLocation;
+
+                SetShape(newHead, newHeadRow, newHeadCol);
+                snakeParts.RemoveLast();
+                snakeParts.AddFirst(newHead);
+            }
         }
 
-        private void SetShape(Shape shape, int row, int col)
+        private void SetShape(
+            Shape shape, int row, int col)
         {
             double top = row * CellSize;
             double left = col * CellSize;
@@ -198,8 +239,6 @@ namespace snakeXD
                 default:
                     return;
             }
-
-            ChangeSnakeDirection(direction);
         }
     }
 }

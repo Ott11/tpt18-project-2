@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Direction.cs" />
     <Compile Include="GameStatus.cs" />
+    <Compile Include="Location.cs" />
     <Compile Include="Snake.cs" />
     <Compile Include="snakePart.cs" />
     <Page Include="MainWindow.xaml">

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:snakeXD"
         mc:Ignorable="d"
         Title="snakeXD" 
-         ResizeMode="NoResize" Topmost="True" 
+        ResizeMode="NoResize" Topmost="True" 
         SizeToContent="WidthAndHeight"
         KeyDown="Window_KeyDown">
     <Grid>
@@ -23,11 +23,6 @@
             Grid.Row="1"
             Name="board" 
             Height="480" Width="480">
-            <Rectangle 
-                Name="snakeShape"
-                Fill="MediumBlue"
-                Panel.ZIndex="10">
-            </Rectangle>
             <Ellipse
                 Name="foodShape"
                 Fill="Red"
