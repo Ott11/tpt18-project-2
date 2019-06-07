@@ -12,7 +12,6 @@ namespace snakeXD
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-
     public partial class MainWindow : Window
     {
         const double CellSize = 30D;
@@ -41,7 +40,7 @@ namespace snakeXD
             ChangePoints(0);
 
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(0.5);
+            timer.Interval = TimeSpan.FromSeconds(0.25);
             timer.Tick += Timer_Tick;
             timer.Start();
 
@@ -60,12 +59,8 @@ namespace snakeXD
 
                 for (int col = 0; col < CellCount; col++)
                 {
-                    Rectangle r = new Rectangle();
-                    r.Width = CellSize;
-                    r.Height = CellSize;
-                    r.Fill = color;
-                    SetShape(r, row, col);
-                    board.Children.Add(r);
+                    InitRectangle(
+                        CellSize, row, col, color, 0);
 
                     color = color == color1 ? color2 : color1;
                 }
@@ -103,17 +98,9 @@ namespace snakeXD
                 int row = index;
                 int col = index + i;
 
-                Location location = new Location(row, col);
+                Rectangle r = InitRectangle(
+                    CellSize, row, col, Brushes.MediumBlue, 10);
 
-                Rectangle r = new Rectangle();
-                r.Height = CellSize;
-                r.Width = CellSize;
-                r.Fill = Brushes.MediumBlue;
-                Panel.SetZIndex(r, 10);
-                r.Tag = location;
-
-                SetShape(r, row, col);
-                board.Children.Add(r);
                 snakeParts.AddLast(r);
             }
 
@@ -122,6 +109,30 @@ namespace snakeXD
 
         private void ChangeSnakeDirection(Direction direction)
         {
+            if (snakeDirection == Direction.Left &&
+               direction == Direction.Right)
+            {
+                return;
+            }
+
+            if (snakeDirection == Direction.Right &&
+                direction == Direction.Left)
+            {
+                return;
+            }
+
+            if (snakeDirection == Direction.Up &&
+                direction == Direction.Down)
+            {
+                return;
+            }
+
+            if (snakeDirection == Direction.Down &&
+                direction == Direction.Up)
+            {
+                return;
+            }
+
             snakeDirection = direction;
             lblSnakeDirection.Content =
                 $"Direction: {direction}";
@@ -152,9 +163,6 @@ namespace snakeXD
                     break;
             }
 
-            Location newHeadLocation =
-                new Location(newHeadRow, newHeadCol);
-
             bool outOfBoundaries =
                 newHeadRow < 0 || newHeadRow >= CellCount ||
                 newHeadCol < 0 || newHeadCol >= CellCount;
@@ -165,33 +173,67 @@ namespace snakeXD
             }
 
             bool food =
-                newHeadRow == foodRow &&
-                newHeadCol == foodCol;
+               newHeadRow == foodRow &&
+               newHeadCol == foodCol;
+
+            foreach (Rectangle r in snakeParts)
+            {
+                if (!food && snakeParts.Last.Value == r)
+                {
+                    continue;
+                }
+
+                Location location = (Location)r.Tag;
+                if (location.Row == newHeadRow &&
+                   location.Col == newHeadCol)
+                {
+                    ChangeGameStatus(GameStatus.GameOver);
+                    return;
+                }
+            }
+
             if (food)
             {
                 ChangePoints(points + 1);
                 InitFood();
 
-                Rectangle r = new Rectangle();
-                r.Height = CellSize;
-                r.Width = CellSize;
-                r.Fill = Brushes.MediumBlue;
-                Panel.SetZIndex(r, 10);
-                r.Tag = newHeadLocation;
-
-                SetShape(r, newHeadRow, newHeadCol);
-                board.Children.Add(r);
+                Rectangle r = InitRectangle(
+                    CellSize,
+                    newHeadRow,
+                    newHeadCol,
+                    Brushes.MediumBlue,
+                    10);
                 snakeParts.AddFirst(r);
             }
             else
             {
                 Rectangle newHead = snakeParts.Last.Value;
-                newHead.Tag = newHeadLocation;
+                newHead.Tag = new Location(newHeadRow, newHeadCol);
 
                 SetShape(newHead, newHeadRow, newHeadCol);
                 snakeParts.RemoveLast();
                 snakeParts.AddFirst(newHead);
             }
+        }
+
+        private Rectangle InitRectangle(
+            double size,
+            int row,
+            int col,
+            Brush fill,
+            int zIndex)
+        {
+            Rectangle r = new Rectangle();
+            r.Height = size;
+            r.Width = size;
+            r.Fill = fill;
+            Panel.SetZIndex(r, zIndex);
+            r.Tag = new Location(row, col);
+
+            SetShape(r, row, col);
+            board.Children.Add(r);
+
+            return r;
         }
 
         private void SetShape(
@@ -214,7 +256,8 @@ namespace snakeXD
             MoveSnake();
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        private void Window_KeyDown(
+            object sender, KeyEventArgs e)
         {
             if (gameStatus != GameStatus.Ongoing)
             {
@@ -239,6 +282,7 @@ namespace snakeXD
                 default:
                     return;
             }
+            ChangeSnakeDirection(direction);
         }
     }
 }
